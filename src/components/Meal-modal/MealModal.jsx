@@ -2,21 +2,32 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../UI/Button';
 
-const MealModal = ({addMeals}) => {
-  const DUMMY_MEALS = [
-    {
-      id: 1,
-      title: 'Sushi',
-      description: 'finest fish and veggies',
-      price: 22.99,
-    },
-    {
-      id: 4,
-      title: 'Green Bowl',
-      description: 'finest fish and veggies',
-      price: 19.99,
-    },
-  ];
+const MealModal = ({ handleOrder, handleClose, selectMeal, setSelectMeal }) => {
+  
+  const getTotalPrice = () => {
+    let totalPrice = 0;
+    selectMeal.forEach((item) => {
+      totalPrice += item.price;
+    });
+    return totalPrice.toFixed(2); // округляем до двух знаков после запятой
+  };
+
+  const incrementPrice = (id) => {
+    const selectedMeal = selectMeal.find((item) => item.id === id);
+    if (selectedMeal) {
+      selectedMeal.price += selectedMeal.initialPrice;
+      setSelectMeal([...selectMeal]);
+    }
+  };
+
+  const decrementPrice = (id) => {
+    const selectedMeal = selectMeal.find((item) => item.id === id);
+    if (selectedMeal) {
+      selectedMeal.price -= selectedMeal.initialPrice;
+      setSelectMeal([...selectMeal]);
+    }
+  };
+
   return (
     <div style={{ position: 'absolute', top: 750, left: 400 }}>
       <div
@@ -28,13 +39,13 @@ const MealModal = ({addMeals}) => {
           boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.1)',
         }}
       >
-        {DUMMY_MEALS.map((item) => (
+        {selectMeal.map((item) => (
           <StyledDivForm key={item.id}>
             <StyledDivUl>
               <ul>
                 <li className="title">{item.title}</li>
                 <div className="priceInput">
-                  <li className="price">${item.price}</li>
+                  <li className="price">${item.price.toFixed(2)}</li>
                   <input type="number" placeholder="1" id={item.id} />
                 </div>
               </ul>
@@ -50,16 +61,7 @@ const MealModal = ({addMeals}) => {
                 background="containedplusM"
                 border="containedplusM"
                 borderRadius="containedplusM"
-                // padding="outlinedAmond"
-                // text="+ Add"
-                // size="outlinedAmond"
-                // color="outlined"
-                // fontWeight="outlined"
-                // background="outlined"
-                // border="outlined"
-                // borderRadius="outlined"
-                // backgroundHover="outlined"
-                // colorHover="outlined"
+                onClick={() => decrementPrice(item.id)}
               />
               <Button
                 padding="containedplusM"
@@ -70,16 +72,7 @@ const MealModal = ({addMeals}) => {
                 background="containedplusM"
                 border="containedplusM"
                 borderRadius="containedplusM"
-                // padding="outlinedAmond"
-                // text="+ Add"
-                // size="outlinedAmond"
-                // color="outlined"
-                // fontWeight="outlined"
-                // background="outlined"
-                // border="outlined"
-                // borderRadius="outlined"
-                // backgroundHover="outlined"
-                // colorHover="outlined"
+                onClick={() => incrementPrice(item.id)}
               />
             </StyledDivAmount>
           </StyledDivForm>
@@ -87,17 +80,9 @@ const MealModal = ({addMeals}) => {
         <StyleDivFooter>
           <h2>Total Amount</h2>
           <div>
-            <p>$200.99</p>
+            <p>${getTotalPrice()}</p>
             <div>
               <Button
-                //   padding="containedAmond"
-                //   text="+ Add"
-                //   size="containedAmond"
-                //   color="contained"
-                //   fontWeight="contained"
-                //   background="contained"
-                //   border="contained"
-                //   borderRadius="contained"
                 padding="outlinedAmond"
                 text="Order"
                 size="outlinedAmond"
@@ -108,27 +93,20 @@ const MealModal = ({addMeals}) => {
                 borderRadius="outlined"
                 backgroundHover="outlined"
                 colorHover="outlined"
+                onClick={() => handleOrder()}
               />
               <Button
-                //   padding="containedAmond"
-                //   text="Close"
-                //   size="containedAmond"
                 color="contained"
-                //   fontWeight="contained"
                 background="contained"
-                //   border="contained"
-                //   borderRadius="contained"
                 padding="outlinedAmond"
                 text="Close"
                 size="outlinedAmond"
-                //   color="outlined"
                 fontWeight="outlined"
-                //   background="outlined"
                 border="outlined"
                 borderRadius="outlined"
                 backgroundHover="outlined"
                 colorHover="outlined"
-                onClick={() => addMeals()}
+                onClick={() => handleClose()}
               />
             </div>
           </div>

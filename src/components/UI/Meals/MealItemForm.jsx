@@ -2,33 +2,8 @@ import React from 'react';
 import { styled } from 'styled-components';
 import Button from '../Button';
 
-const MealItemForm = ({ addMeals, isAddTrue }) => {
-  const DUMMY_MEALS = [
-    {
-      id: 1,
-      title: 'Sushi',
-      description: 'finest fish and veggies',
-      price: 22.99,
-    },
-    {
-      id: 2,
-      title: 'Pizza',
-      description: 'finest fish and veggies',
-      price: 16.0,
-    },
-    {
-      id: 3,
-      title: 'Barbecue',
-      description: 'finest fish and veggies',
-      price: 12.99,
-    },
-    {
-      id: 4,
-      title: 'Green Bowl',
-      description: 'finest fish and veggies',
-      price: 19.99,
-    },
-  ];
+const MealItemForm = ({ addMeals, isAddTrue, DUMMY_MEALS }) => {
+
   return (
     <StyledDiv>
       {!isAddTrue && (
@@ -64,7 +39,8 @@ const MealItemForm = ({ addMeals, isAddTrue }) => {
                   background="contained"
                   border="contained"
                   borderRadius="contained"
-                  onClick={() => addMeals()}
+                  onClick={() => addMeals(item.id)} // Передаем весь объект элемента
+
                   // padding="outlinedAmond"
                   // text="+ Add"
                   // size="outlinedAmond"
